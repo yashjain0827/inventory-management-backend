@@ -1,6 +1,7 @@
 package com.yash.inventory.controller;
 
 import com.yash.inventory.dto.ApiResponse;
+import com.yash.inventory.dto.LoginRequest;
 import com.yash.inventory.dto.RegisterRequest;
 import com.yash.inventory.service.AuthService;
 
@@ -24,6 +25,18 @@ public class AuthController {
                 .success(true)
                 .message(message)
                 .data(null)
+                .build();
+    }
+
+    @PostMapping("/login")
+    public ApiResponse<String> login(@RequestBody LoginRequest request) {
+
+        String token = authService.login(request);
+
+        return ApiResponse.<String>builder()
+                .success(true)
+                .message("Login successful")
+                .data(token)
                 .build();
     }
 }
