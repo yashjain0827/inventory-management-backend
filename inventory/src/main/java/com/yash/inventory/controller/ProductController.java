@@ -40,4 +40,41 @@ public class ProductController {
                 .data(products)
                 .build();
     }
+
+    @GetMapping("/{id}")
+    public ApiResponse<Product> getProductById(@PathVariable Long id) {
+
+        Product product = productService.getProductById(id);
+
+        return ApiResponse.<Product>builder()
+                .success(true)
+                .message("Product fetched successfully")
+                .data(product)
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<String> updateProduct(@PathVariable Long id,
+            @Valid @RequestBody ProductRequest request) {
+
+        String message = productService.updateProduct(id, request);
+
+        return ApiResponse.<String>builder()
+                .success(true)
+                .message(message)
+                .data(null)
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> deleteProduct(@PathVariable Long id) {
+
+        String message = productService.deleteProduct(id);
+
+        return ApiResponse.<String>builder()
+                .success(true)
+                .message(message)
+                .data(null)
+                .build();
+    }
 }

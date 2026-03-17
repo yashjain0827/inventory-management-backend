@@ -30,4 +30,16 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.internalServerError().body(response);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleNotFound(ResourceNotFoundException ex) {
+
+        ApiResponse<Object> response = ApiResponse.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .data(null)
+                .build();
+
+        return ResponseEntity.status(404).body(response);
+    }
 }
