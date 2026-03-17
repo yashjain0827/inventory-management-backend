@@ -17,4 +17,6 @@ public class ProductRequest {
 
     @NotNull
     private Integer quantity;
+    @NotNull
+    private Long categoryId;
 }

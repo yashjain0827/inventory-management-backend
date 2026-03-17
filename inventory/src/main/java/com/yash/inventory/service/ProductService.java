@@ -1,8 +1,10 @@
 package com.yash.inventory.service;
 
 import com.yash.inventory.dto.ProductRequest;
+import com.yash.inventory.entity.Category;
 import com.yash.inventory.entity.Product;
 import com.yash.inventory.exception.ResourceNotFoundException;
+import com.yash.inventory.repository.CategoryRepository;
 import com.yash.inventory.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,16 +16,20 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     public String createProduct(ProductRequest request) {
+
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         Product product = Product.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .quantity(request.getQuantity())
+                .category(category)
                 .build();
-
         productRepository.save(product);
 
         return "Product created successfully";
