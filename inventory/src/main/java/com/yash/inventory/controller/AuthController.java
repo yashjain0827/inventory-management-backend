@@ -1,5 +1,6 @@
 package com.yash.inventory.controller;
 
+import com.yash.inventory.dto.ApiResponse;
 import com.yash.inventory.dto.RegisterRequest;
 import com.yash.inventory.service.AuthService;
 
@@ -15,7 +16,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public String register(@Valid @RequestBody RegisterRequest request) {
-        return authService.register(request);
+    public ApiResponse<String> register(@Valid @RequestBody RegisterRequest request) {
+
+        String message = authService.register(request);
+
+        return ApiResponse.<String>builder()
+                .success(true)
+                .message(message)
+                .data(null)
+                .build();
     }
 }

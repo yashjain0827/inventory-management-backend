@@ -2,6 +2,7 @@ package com.yash.inventory.service;
 
 import com.yash.inventory.dto.RegisterRequest;
 import com.yash.inventory.entity.User;
+import com.yash.inventory.exception.ResourceAlreadyExistsException;
 import com.yash.inventory.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +21,7 @@ public class AuthService {
     public String register(RegisterRequest request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+            throw new ResourceAlreadyExistsException("Email already exists");
         }
 
         User user = User.builder()
