@@ -1,14 +1,23 @@
 package com.yash.inventory.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.yash.inventory.dto.ApiResponse;
 import com.yash.inventory.dto.ProductRequest;
 import com.yash.inventory.entity.Product;
 import com.yash.inventory.service.ProductService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -30,11 +39,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public ApiResponse<List<Product>> getAllProducts() {
+    public ApiResponse<Page<Product>> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        List<Product> products = productService.getAllProducts();
+        Page<Product> products = productService.getAllProducts(page, size);
 
-        return ApiResponse.<List<Product>>builder()
+        return ApiResponse.<Page<Product>>builder()
                 .success(true)
                 .message("Products fetched successfully")
                 .data(products)

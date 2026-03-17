@@ -2,13 +2,16 @@ package com.yash.inventory.service;
 
 import com.yash.inventory.dto.OrderRequest;
 import com.yash.inventory.entity.*;
+import com.yash.inventory.exception.InsufficientStockException;
 import com.yash.inventory.exception.ResourceNotFoundException;
 import com.yash.inventory.repository.OrderRepository;
 import com.yash.inventory.repository.ProductRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
+    @Transactional
     public String createOrder(OrderRequest request) {
 
         Product product = productRepository.findById(request.getProductId())
@@ -29,7 +33,7 @@ public class OrderService {
             product.setQuantity(product.getQuantity() + request.getQuantity());
         } else {
             if (product.getQuantity() < request.getQuantity()) {
-                throw new RuntimeException("Insufficient stock");
+                throw new InsufficientStockException("Insufficient stock");
             }
             product.setQuantity(product.getQuantity() - request.getQuantity());
         }

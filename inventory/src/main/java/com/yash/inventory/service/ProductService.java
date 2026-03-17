@@ -1,5 +1,9 @@
 package com.yash.inventory.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import com.yash.inventory.dto.ProductRequest;
 import com.yash.inventory.entity.Category;
 import com.yash.inventory.entity.Product;
@@ -10,9 +14,6 @@ import com.yash.inventory.repository.ProductRepository;
 import com.yash.inventory.repository.SupplierRepository;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,8 +44,8 @@ public class ProductService {
         return "Product created successfully";
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(int page, int size) {
+        return productRepository.findAll(PageRequest.of(page, size));
     }
 
     public Product getProductById(Long id) {
