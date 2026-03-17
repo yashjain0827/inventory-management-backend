@@ -16,4 +16,7 @@ public class OrderRequest {
 
     @NotNull
     private String type; // PURCHASE / SALE
+
+    @NotNull
+    private Long warehouseId;
 }

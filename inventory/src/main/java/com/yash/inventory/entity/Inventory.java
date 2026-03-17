@@ -3,16 +3,14 @@ package com.yash.inventory.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "orders")
+@Table(name = "inventory")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Order {
+public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +20,9 @@ public class Order {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private Integer quantity;
-
-    @Enumerated(EnumType.STRING)
-    private OrderType type; // PURCHASE or SALE
-
-    private LocalDateTime createdAt;
     @ManyToOne
     @JoinColumn(name = "warehouse_id")
     private Warehouse warehouse;
+
+    private Integer quantity;
 }

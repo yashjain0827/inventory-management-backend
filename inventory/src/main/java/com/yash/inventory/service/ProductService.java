@@ -35,10 +35,10 @@ public class ProductService {
                 .name(request.getName())
                 .description(request.getDescription())
                 .price(request.getPrice())
-                .quantity(request.getQuantity())
                 .category(category)
                 .supplier(supplier)
                 .build();
+
         productRepository.save(product);
 
         return "Product created successfully";
@@ -49,7 +49,6 @@ public class ProductService {
     }
 
     public Product getProductById(Long id) {
-
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
@@ -61,7 +60,6 @@ public class ProductService {
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setQuantity(request.getQuantity());
 
         productRepository.save(product);
 
@@ -71,7 +69,6 @@ public class ProductService {
     public String deleteProduct(Long id) {
 
         Product product = getProductById(id);
-
         productRepository.delete(product);
 
         return "Product deleted successfully";
