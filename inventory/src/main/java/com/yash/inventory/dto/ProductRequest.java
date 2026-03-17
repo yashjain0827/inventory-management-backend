@@ -19,4 +19,7 @@ public class ProductRequest {
     private Integer quantity;
     @NotNull
     private Long categoryId;
+
+    @NotNull
+    private Long supplierId;
 }
