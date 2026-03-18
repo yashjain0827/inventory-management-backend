@@ -2,6 +2,7 @@ package com.yash.inventory.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ public class WarehouseController {
 
     private final WarehouseService warehouseService;
 
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
     @PostMapping
     public ApiResponse<String> createWarehouse(@Valid @RequestBody WarehouseRequest request) {
 

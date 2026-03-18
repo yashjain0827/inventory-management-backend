@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.yash.inventory.service.CustomUserDetailsService;
+import com.yash.inventory.security.CustomUserDetailsService;
 import com.yash.inventory.util.JwtUtil;
 
 import io.jsonwebtoken.Claims;
@@ -47,12 +47,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
             var userDetails = userDetailsService.loadUserByUsername(email);
 
+            // ✅ Extract claims
             Claims claims = jwtUtil.extractAllClaims(token);
             Map<String, Object> claimsMap = new HashMap<>(claims);
+
+            // ✅ Single correct authToken
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    claimsMap, // ✅ claims map as principal
+                    claimsMap, // principal
                     null,
-                    userDetails.getAuthorities());
+                    userDetails.getAuthorities() // roles
+            );
 
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

@@ -6,6 +6,8 @@ import com.yash.inventory.entity.Company;
 import com.yash.inventory.service.CompanyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping
     public ApiResponse<String> createCompany(@Valid @RequestBody CompanyRequest request) {
 

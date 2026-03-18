@@ -8,49 +8,33 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class SecurityUtils {
 
     @SuppressWarnings("unchecked")
-    public static Long getCurrentCompanyId() {
+    private static Map<String, Object> getClaims() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getPrincipal() == null) {
             throw new RuntimeException("Unauthorized: No authentication found");
         }
 
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof Map<?, ?> claims) {
-            Object companyIdObj = claims.get("companyId");
-            if (companyIdObj == null) {
-                throw new RuntimeException("Company ID not found in token");
-            }
-            return Long.valueOf(companyIdObj.toString());
+        if (authentication.getPrincipal() instanceof Map<?, ?> claims) {
+            return (Map<String, Object>) claims;
         }
 
         throw new RuntimeException("Invalid authentication principal");
     }
 
-    @SuppressWarnings("unchecked")
+    public static Long getCurrentCompanyId() {
+        return Long.valueOf(getClaims().get("companyId").toString());
+    }
+
     public static Long getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof Map<?, ?> claims) {
-            Object userIdObj = claims.get("userId");
-            if (userIdObj == null)
-                throw new RuntimeException("User ID not found in token");
-            return Long.valueOf(userIdObj.toString());
-        }
-        throw new RuntimeException("Invalid authentication principal");
+        return Long.valueOf(getClaims().get("userId").toString());
     }
 
-    @SuppressWarnings("unchecked")
     public static String getCurrentRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-        if (principal instanceof Map<?, ?> claims) {
-            Object roleObj = claims.get("role");
-            if (roleObj == null)
-                throw new RuntimeException("Role not found in token");
-            return roleObj.toString();
-        }
-        throw new RuntimeException("Invalid authentication principal");
+        return getClaims().get("role").toString();
+    }
+
+    public static String getCurrentEmail() {
+        return getClaims().get("sub").toString(); // subject
     }
 }
