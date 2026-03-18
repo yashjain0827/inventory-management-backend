@@ -21,4 +21,7 @@ public class Supplier {
     private String phone;
 
     private String address;
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 }

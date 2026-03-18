@@ -12,6 +12,4 @@ public class WarehouseRequest {
 
     private String location;
 
-    @NotNull
-    private Long companyId;
 }

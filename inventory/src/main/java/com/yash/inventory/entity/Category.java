@@ -19,4 +19,8 @@ public class Category {
     private String name;
 
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 }

@@ -25,4 +25,8 @@ public class Inventory {
     private Warehouse warehouse;
 
     private Integer quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 }

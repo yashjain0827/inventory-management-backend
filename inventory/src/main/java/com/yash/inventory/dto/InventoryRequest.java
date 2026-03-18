@@ -5,19 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class OrderRequest {
+public class InventoryRequest {
 
     @NotNull
     private Long productId;
 
     @NotNull
-    @Min(1)
-    private Integer quantity;
-
-    @NotNull
-    private String type; // PURCHASE / SALE
-
-    @NotNull
     private Long warehouseId;
 
+    @NotNull
+    @Min(0)
+    private Integer quantity;
 }

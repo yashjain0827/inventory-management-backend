@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 
 import com.yash.inventory.dto.ProductRequest;
 import com.yash.inventory.entity.Category;
+import com.yash.inventory.entity.Company;
 import com.yash.inventory.entity.Product;
 import com.yash.inventory.entity.Supplier;
 import com.yash.inventory.exception.ResourceNotFoundException;
 import com.yash.inventory.repository.CategoryRepository;
+import com.yash.inventory.repository.CompanyRepository;
 import com.yash.inventory.repository.ProductRepository;
 import com.yash.inventory.repository.SupplierRepository;
+import com.yash.inventory.util.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,9 +25,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final SupplierRepository supplierRepository;
+    private final CompanyRepository companyRepository;
 
     public String createProduct(ProductRequest request) {
 
+        Long companyId = SecurityUtils.getCurrentCompanyId();
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
@@ -37,6 +44,7 @@ public class ProductService {
                 .price(request.getPrice())
                 .category(category)
                 .supplier(supplier)
+                .company(company) // 🔥 IMPORTANT
                 .build();
 
         productRepository.save(product);
@@ -45,11 +53,17 @@ public class ProductService {
     }
 
     public Page<Product> getAllProducts(int page, int size) {
-        return productRepository.findAll(PageRequest.of(page, size));
+
+        Long companyId = SecurityUtils.getCurrentCompanyId();
+
+        return productRepository.findByCompanyId(companyId, PageRequest.of(page, size));
     }
 
     public Product getProductById(Long id) {
-        return productRepository.findById(id)
+
+        Long companyId = SecurityUtils.getCurrentCompanyId();
+
+        return productRepository.findByIdAndCompanyId(id, companyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
@@ -68,7 +82,8 @@ public class ProductService {
 
     public String deleteProduct(Long id) {
 
-        Product product = getProductById(id);
+        Product product = getProductById(id); // already filtered
+
         productRepository.delete(product);
 
         return "Product deleted successfully";

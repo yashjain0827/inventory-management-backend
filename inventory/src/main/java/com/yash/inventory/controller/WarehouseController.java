@@ -1,14 +1,20 @@
 package com.yash.inventory.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.yash.inventory.dto.ApiResponse;
 import com.yash.inventory.dto.WarehouseRequest;
 import com.yash.inventory.entity.Warehouse;
 import com.yash.inventory.service.WarehouseService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/warehouses")
@@ -29,10 +35,10 @@ public class WarehouseController {
                 .build();
     }
 
-    @GetMapping("/company/{companyId}")
-    public ApiResponse<List<Warehouse>> getWarehouses(@PathVariable Long companyId) {
+    @GetMapping
+    public ApiResponse<List<Warehouse>> getWarehouses() {
 
-        List<Warehouse> warehouses = warehouseService.getWarehousesByCompany(companyId);
+        List<Warehouse> warehouses = warehouseService.getWarehouses();
 
         return ApiResponse.<List<Warehouse>>builder()
                 .success(true)

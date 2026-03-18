@@ -19,9 +19,7 @@ public class SupplierController {
 
     @PostMapping
     public ApiResponse<String> createSupplier(@Valid @RequestBody SupplierRequest request) {
-
         String message = supplierService.createSupplier(request);
-
         return ApiResponse.<String>builder()
                 .success(true)
                 .message(message)
@@ -31,9 +29,7 @@ public class SupplierController {
 
     @GetMapping
     public ApiResponse<List<Supplier>> getAllSuppliers() {
-
         List<Supplier> suppliers = supplierService.getAllSuppliers();
-
         return ApiResponse.<List<Supplier>>builder()
                 .success(true)
                 .message("Suppliers fetched successfully")

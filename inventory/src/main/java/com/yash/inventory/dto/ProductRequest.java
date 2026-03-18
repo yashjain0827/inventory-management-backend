@@ -22,4 +22,5 @@ public class ProductRequest {
 
     @NotNull
     private Long supplierId;
+
 }

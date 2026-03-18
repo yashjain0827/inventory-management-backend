@@ -23,8 +23,8 @@ public class User {
 
     private String password;
 
-    private String role;
-
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;

@@ -1,17 +1,24 @@
 package com.yash.inventory.config;
 
-import com.yash.inventory.util.JwtUtil;
-import com.yash.inventory.service.CustomUserDetailsService;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.yash.inventory.service.CustomUserDetailsService;
+import com.yash.inventory.util.JwtUtil;
+
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -40,8 +47,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
             var userDetails = userDetailsService.loadUserByUsername(email);
 
+            Claims claims = jwtUtil.extractAllClaims(token);
+            Map<String, Object> claimsMap = new HashMap<>(claims);
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
+                    claimsMap, // ✅ claims map as principal
                     null,
                     userDetails.getAuthorities());
 

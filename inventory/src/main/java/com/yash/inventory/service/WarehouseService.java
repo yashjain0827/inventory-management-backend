@@ -6,6 +6,8 @@ import com.yash.inventory.entity.Warehouse;
 import com.yash.inventory.exception.ResourceNotFoundException;
 import com.yash.inventory.repository.CompanyRepository;
 import com.yash.inventory.repository.WarehouseRepository;
+import com.yash.inventory.util.SecurityUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,9 @@ public class WarehouseService {
 
     public String createWarehouse(WarehouseRequest request) {
 
-        Company company = companyRepository.findById(request.getCompanyId())
+        Long companyId = SecurityUtils.getCurrentCompanyId();
+
+        Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
         Warehouse warehouse = Warehouse.builder()
@@ -34,7 +38,10 @@ public class WarehouseService {
         return "Warehouse created successfully";
     }
 
-    public List<Warehouse> getWarehousesByCompany(Long companyId) {
+    public List<Warehouse> getWarehouses() {
+
+        Long companyId = SecurityUtils.getCurrentCompanyId();
+
         return warehouseRepository.findByCompanyId(companyId);
     }
 }
